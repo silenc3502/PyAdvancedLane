@@ -471,7 +471,7 @@ def lanes_to_wmask(wimg, x1, y1, x2, y2):
     pts = np.array([pts], dtype=np.int64)
 
     # Draw the lane onto the warped blank image
-    cv2.fillPoly(color_warp, pts, (0, 255, 0))
+    cv2.fillPoly(color_warp, pts, (0, 128, 0))
     return color_warp
 
 
