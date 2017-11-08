@@ -29,7 +29,12 @@ But I feel some bad because of I failed to make more advanced algorithm.
 I wanna implement Dynamic Color Conversion Matrix for making robust detection.
 Anyway, this file has RANSAC algorithm with estimating the lane.
 
-### Edges masks
+## Undistortion
+
+We can fix distortion to undistortion image like below:
+![](pic_data/undist.png "Undistortion")
+
+## Edges masks
 
 We use Sobel Filter based Gradients.
 I already discussed it's not robust.
