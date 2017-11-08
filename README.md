@@ -181,34 +181,45 @@ Get points from masking area.
 14. lanes_to_wmask()
 Draw lane with input data.
 
-![](pictures/frame_150.jpg "Full Pipeline Example")
+![](pic_data/ransac_result.png "Adding Debug Info")
 
-The three `debug` videos also present this full pipeline.
+We can see the big problem about Illumination at this image.
+So we need to apply above technique to solve this problem.
+This noise can makes strange curve fit.
 
-### Video pipeline speed-up
+## Result
 
-We have described above the pipeline on a single image. When applied to a full video, the former can be optimized to run faster and take advantage of the previous frames segmentation. Namely, we added the following steps to the previous pipeline:
-* compute a simple weighted linear regression (also called m-estimator in statistics) using coefficients from the previous frame. Namely, we assign weights to the masks points proportionally to the distance from the lanes of the previous frame, and then compute a linear regression which correct the small variations appearing in the new frame;
-* reduce the number of iterations in the RANSAC algorithm once 10 frames have been fitted  in order to speed up the computation of every frame;
-* select the best fit from the weighted linear regression, and the two RANSAC regressions described in the previous section.
-* smooth the regression coefficients using a simple low-pass filter.
+This is result of RANSAC based curve fitting.
 
-The main ideas behind the previous modifications are the following:
-* most of the time, the lanes can be easily deduced from the previous frame by doing a simple weighted linear regression which corrects very well small lanes variations from one frame to another;
-* in the case of very steep turns or more noisy edges detection, the previous iteration and correction method may deviate from the optimal solution after a few frames. Hence, we keep computing the usual RANSAC estimates in order to put the algorithm back on tracks in these cases.
+![](pic_data/result_of_ransac.gif "Result")
 
-This full video pipeline is illustrated in the `debug` videos, which show the three different fits.
+## Future Works
 
-## Performance and improvements
+I have below plan to improve this project.
 
-The pipeline performs well on first two videos, providing a smooth and accurate segmentation of the lane, but still adapting quickly to small variations due to road bumps. In addition, the challenge video, it performs well under the bridge, being able to well segment the lane despite noisy edges inputs. It also manages to filter out wrong edges coming from road construction defaults, and only keeping relevant edges.
+1. Apply Gradient Enhancing Conversion
+2. Robust Lane Detection on Various Illumination Condition
+3. Apply LDA Analysis
 
-The performance on the third very challenging video is clearly not as good. The algorithm still manages to segment the road on a large part of the video, despite difficult light and shade conditions and quite steep turns. Nevertheless, it also gets lost on a few occasions, in particular when the right lanes is hardly visible (under leaves, or just not on the video!).
+## References
 
-I believe this non-optimal performance could be fixed by improving several aspect of the pipeline:
-* edges detection: the latter remains quite noisy on the last video, and I think could be improved significantly. One way to do so could be to compute the skelelon on edges masks, and then remove small noisy components, keeping only long lines. It would help the RANSAC algorithm by removing quite a lot of noisy points, and also speed up computation by reducing the number of points to iterate on;
-* the RANSAC algorithm could be implemented on GPU: the main operations can be easily parallelized, and such an implementation would massively speed up the process. With current parameters, it takes around 0.1 second to run the former, and I guess a GPU implementation would be faster by several factors;
-* edges masks could also be directly computed on GPUs, since it only consists of simple filter convolutions; 
-* as shown in the debug videos, adjacent lanes could also be determined. The previous pipeline can be easily adapted to this setting, and I think that such a computation could also make the overall segmentation process more robust to noise.
-
-Of course, a complete different approach is possible using convolutional neural networks. The recent literature on lanes detections tends to go in this direction as it happens to be more robust to noise and allows to optimise the full pipeline instead of every brick inside.
+1.  https://pdfs.semanticscholar.org/2bce/94e1f0d921d6876cf346103f5f3e121bfdd8.pdf
+2.  http://airccj.org/CSCP/vol5/csit53211.pdf
+3.  https://github.com/balancap/SDC-Advanced-Lane-Finding
+4.  https://github.com/diyjac/SDC-P4
+5.  https://github.com/mvirgo/MLND-Capstone
+6.  https://github.com/ab2005/carnd-advanced-line-detection
+7.  https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.arange.html
+8.  https://datascienceschool.net/view-notebook/17608f897087478bbeac096438c716f6/
+9.  https://numba.pydata.org/
+10. http://pythonkim.tistory.com/95
+11. https://en.wikipedia.org/wiki/Numba
+12. http://numba.pydata.org/numba-doc/0.12.2/tutorial_firststeps.html
+13. http://numba.pydata.org/numba-doc/0.13/ir.html
+14. http://numba.pydata.org/numba-doc/dev/user/jitclass.html
+15. http://numba.pydata.org/numba-doc/0.8/pythonstuff.html
+16. https://www.python.org/dev/peps/pep-0465/
+17. https://stackoverflow.com/questions/6392739/what-does-the-at-symbol-do-in-python
+18. http://numba.pydata.org/numba-doc/0.6/doc/examples.html
+19. https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.vstack.html
+20. http://tutorial.math.lamar.edu/Classes/CalcIII/Curvature.aspx
