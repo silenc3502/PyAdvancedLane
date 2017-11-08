@@ -177,6 +177,8 @@ Do this process one more and check previous frame.
 Finally we get best fit data and make it smoothing.
 Now we doing just regression analysis and save this parameters.
 
+![](pic_data/inliers_n_outliers.png "Inliers & Outliers")
+
 9. predict_lanes()
 Predict lanes from image with already saved fitting parameters.
 If we run this function then have to finish fitting.
@@ -201,6 +203,12 @@ Draw lane with input data.
 We can see the big problem about Illumination at this image.
 So we need to apply above technique to solve this problem.
 This noise can makes strange curve fit.
+
+## Curvature
+
+We can calculate curvature like below formula:
+
+![](pic_data/curvature.png "Curvature Formula")
 
 ## Result
 
