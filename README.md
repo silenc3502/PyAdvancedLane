@@ -32,7 +32,7 @@ Anyway, this file has RANSAC algorithm with estimating the lane.
 ## Undistortion
 
 We can fix distortion to undistortion image like below:
-![](pic_data/undist.png "Undistortion")
+![](pic_data/undistortion.png "Undistortion")
 
 ## Edges masks
 
