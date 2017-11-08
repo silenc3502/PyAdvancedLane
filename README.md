@@ -1,10 +1,12 @@
 # Advanced Lane Finding Project
 
-Let's start by recalling the main goals of this project:
+If we need to do it successfully then have to do below process.
 
-* Compute the camera calibration matrix and distortion coefficients given a set of chessboard images.
-* Apply the distortion correction to the raw image.
-* Use color transforms, gradients, etc., to create a thresholded binary image.
+* Get Camera Calibration info to process Image Undistortion.
+* Use Color Transforms, Sobel Filter for Gradients.
+
+However this is not robust. So I'll change it to robust algorithm with non thresholding mechanism. It's very weak on Illumination problem.
+
 * Apply a perspective transform to rectify binary image ("birds-eye view").
 * Detect lane pixels and fit to find lane boundary.
 * Determine curvature of the lane and vehicle position with respect to center.
